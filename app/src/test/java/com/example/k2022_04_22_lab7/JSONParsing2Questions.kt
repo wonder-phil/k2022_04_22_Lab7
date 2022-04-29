@@ -1,8 +1,8 @@
 package com.example.k2022_04_22_lab7
 
 import com.example.k2022_04_22_lab7.models.questions.Question
-import com.example.k2022_04_22_lab7.models.questions.Answer
 import com.example.k2022_04_22_lab7.models.questions.AnswerList
+import com.example.k2022_04_22_lab7.models.questions.AnswerObject
 import com.google.gson.Gson
 import org.junit.Test
 
@@ -51,7 +51,6 @@ class JSONParsing2Questions {
         }
 
         var tinyC: TinyC = gson.fromJson(tinyString, TinyC::class.java)
-
         assertEquals(3, tinyC.getSum())
     }
 
@@ -85,26 +84,65 @@ class JSONParsing2Questions {
 
         var gson: Gson = Gson()
 
-        var one_question_part1: String = "{ 'question': 'How many planets in our solar system', " +
-               " 'imageName' : 'stamford_harbor.jpg' }"
-        var array_answers: String =
-            "[ { 'three': false }," +
-            "{ 'four': false }," +
-            "{ 'eight': true }," +
-            "{ 'ten': false }" +
-            "]"
+        var one_question_part1: String = "{ 'question': 'How many planets in our solar system', 'imageName' : 'stamford_harbor.jpg', 'answers' : { 'answerList' : [  {  'answer': 'there are 8 planets' , 'isTrue': 'true' }, {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] } }"
+        //var one_question_part2: String = "{ \"question\" : \"How many planets in our solar system\", \"imageName\" : \"stamford_harbor.jpg\", \"answerList\" : [  {  \"answer\": \"there are 8 planets\" , \"isTrue\": \"true\" }, {  \"answer\": \"there are 128 planets\" , \"isTrue\": \"false\" } ] }"
 
-            var question: Question = gson.fromJson(one_question_part1,Question::class.java)
+        var question: Question = gson.fromJson(one_question_part1,Question::class.java)
 
-            assertEquals("stamford_harbor.jpg", question.imageName())
-
-        }
-
-
-
-
-        @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+        assertEquals(2, question.numberOfAnswers())
     }
+
+    @Test
+    fun question_gson_list() {
+
+        var gson: Gson = Gson()
+        var array_answers: String =
+            "[ { 'answer': 'good' }," +
+                    "{ 'answer': 'bad' }" +
+                    "]"
+
+        var answerList: List<AnswerObject> = gson.fromJson(array_answers, Array<AnswerObject>::class.java ).toList()
+
+        assertEquals(2, answerList.size)
+    }
+
+    @Test
+    fun question_gson_list2() {
+
+        var gson: Gson = Gson()
+        var array_answers: String =
+            "[ {  'answer': 'there are 8 planets' , 'isTrue': 'true' },  {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] "
+
+        var answerList: List<AnswerObject> = gson.fromJson(array_answers, Array<AnswerObject>::class.java ).toList()
+
+        assertEquals(2, answerList.size)
+    }
+
+    @Test
+    fun answerList_gson_list() {
+
+        var gson: Gson = Gson()
+        var array_answers: String =
+            "{ 'answerList' : [  {  'answer': 'there are 8 planets' , 'isTrue': 'true' }, {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] }"
+
+
+        var aList: AnswerList = gson.fromJson(array_answers, AnswerList::class.java )
+        assertEquals(2, aList.numberOfAnswers())
+    }
+
+    @Test
+    fun question_gson() {
+
+        var gson: Gson = Gson()
+        var full_question: String =
+            "{ 'question': 'How many planets', 'imageName': 'stamford_harbor.jpg', 'answers' : { 'answerList' : [  {  'answer': 'there are 8 planets' , 'isTrue': 'true' }, {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] } }"
+
+        //  "{ 'question': 'How many planets', 'imageName': 'stamford_harbor.jpg', 'answerList' : [  {  'answer': 'there are 8 planets' , 'isTrue': 'true' }, {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] }"
+
+        var question: Question = gson.fromJson(full_question, Question::class.java )
+        assertEquals(2, question.numberOfAnswers())
+    }
+
+
+
 }

@@ -1,13 +1,17 @@
 package com.example.k2022_04_22_lab7.models.questions
 
-class AnswerList {
-     private var answerList = mutableListOf<Answer>()
+class AnswerList(lst: List<AnswerObject>) {
+     private var answerList = mutableListOf<AnswerObject>()
 
-    public fun numberOfAnswers() : Int {
+    fun numberOfAnswers() : Int {
         return answerList.size
     }
 
-    fun addAnswer(answerString: String, isTrue: Boolean) {
-        answerList.add(Answer(answerString,isTrue))
+    fun setAnswerList(aList: List<AnswerObject>) {
+        answerList = aList.toMutableList()
+    }
+
+    fun addAnswer(answerString: String, isTrue: String) {
+        answerList.add(AnswerObject(answerString,isTrue))
     }
 }

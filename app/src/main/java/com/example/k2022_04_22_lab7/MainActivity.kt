@@ -12,6 +12,8 @@ import com.android.volley.toolbox.ImageRequest
 import com.android.volley.toolbox.JsonArrayRequest
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.example.k2022_04_22_lab7.models.questions.Question
+import com.google.gson.Gson
 
 
 class MainActivity : AppCompatActivity() {
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var getImageButton: Button
     private lateinit var basicQuestionView: TextView
     private lateinit var imageView: ImageView
+
+    private var gson = Gson()
 
     val urlJSON = "http://192.168.56.1:8080/questions";
     val urlIMAGE = "http://192.168.56.1:8080/static/stamford_harbor.jpg";
@@ -47,6 +51,8 @@ class MainActivity : AppCompatActivity() {
                 { response ->
                     // Display the first 500 characters of the response string.
                     basicQuestionView.setText("Response is: ${response}")
+
+                    var questionList: List<Question> = gson.fromJson(response.toString(), Array<Question>::class.java ).toList()
                 },
                 { error ->  basicQuestionView.text = "Error: ${error}" })
 

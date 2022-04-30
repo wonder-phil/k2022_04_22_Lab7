@@ -85,7 +85,6 @@ class JSONParsing2Questions {
         var gson: Gson = Gson()
 
         var one_question_part1: String = "{ 'question': 'How many planets in our solar system', 'imageName' : 'stamford_harbor.jpg', 'answers' : { 'answerList' : [  {  'answer': 'there are 8 planets' , 'isTrue': 'true' }, {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] } }"
-        //var one_question_part2: String = "{ \"question\" : \"How many planets in our solar system\", \"imageName\" : \"stamford_harbor.jpg\", \"answerList\" : [  {  \"answer\": \"there are 8 planets\" , \"isTrue\": \"true\" }, {  \"answer\": \"there are 128 planets\" , \"isTrue\": \"false\" } ] }"
 
         var question: Question = gson.fromJson(one_question_part1,Question::class.java)
 
@@ -144,5 +143,19 @@ class JSONParsing2Questions {
     }
 
 
+    @Test
+    fun question_list_gson() {
+
+        var gson: Gson = Gson()
+        var full_question_list: String =
+            "[ { 'question': 'How many planets', 'imageName': 'stamford_harbor.jpg', 'answers' : { 'answerList' : [  {  'answer': 'there are 8 planets' , 'isTrue': 'true' }, {  'answer': 'there are 128 planets' , 'isTrue': 'false' } ] } }," +
+                    "{ 'question': 'How many seas', 'imageName': 'stamford_harbor.jpg', 'answers' : { 'answerList' : [  {  'answer': 'there are 8 seas' , 'isTrue': 'true' }, {  'answer': 'there are 7 seas' , 'isTrue': 'false' } ] } } ]"
+
+        var questionList: List<Question> = gson.fromJson(full_question_list, Array<Question>::class.java ).toList()
+
+        assertEquals("How many planets", questionList[0].getQuestion())
+        assertEquals("How many seas", questionList[1].getQuestion())
+        assertNotEquals("Good day?", questionList[1].getQuestion())
+    }
 
 }
